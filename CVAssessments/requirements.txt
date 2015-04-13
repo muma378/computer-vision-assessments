@@ -1,0 +1,23 @@
+task 1)
+To implement the new segment.cpp which based on the grabcut function, following requirements need to be noted:
+1. Allowing interactive between user and graphs, these operations are allowed:
+    - drawing rectangle
+    - marking foreground
+    - marking background
+    - press "n" to step into next iteration
+    - press "Esc" to cancel all operations
+    - press "q" to quit
+
+2. Allowing user to save and load their operations, which makes it possible to perform a pseudo automated object segmentation. These marks should be saved in one file. Meanwhile, the new features brought more operations like:
+    - press "s" to save/overwrite
+    - press "l" to load and apply
+
+3. Therefore, some operations are removed, including "probably backgournd" and "probably foreground".
+
+task 2)
+1. Constructing the stationary background from a few sequence of images:
+    - monitoring the change of the postive ADI matrix
+    - find the postive ADI stop changing
+    - replace the pixels by the sequence images
+
+2. Subtract every frame from the refrence image.
