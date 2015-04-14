@@ -3,6 +3,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "segment.hpp"
 #include "motionTrack.hpp"
+#include "kalmanFilterTrack.hpp"
 
 #include <iostream>
 
@@ -121,10 +122,10 @@ exit_main:
     return 0;
 }
 
-motionTracker mt;
 
-int main(int argc, char** argv)
+int motion_tracking(int argc, char** argv)
 {
+    motionTracker mt;
     string file = "/Users/imac/Desktop/Computer Vision/videos/ball.mp4";
     VideoCapture capture(file);
     Mat frame;
@@ -138,11 +139,40 @@ int main(int argc, char** argv)
     while (capture.get(CAP_PROP_POS_FRAMES)<capture.get(CAP_PROP_FRAME_COUNT)-1) {
         capture.read(frame);
         mt.getTarget(frame);
+        mt.drawCross(frame, mt.x, mt.y);
         imshow(winName, frame);
         waitKey(10);
     }
     mt.outputPosition();
     capture.release();
-
     
+    return 1;
 }
+
+int kalman_filter_tracking(int argc, char** argv)
+{
+    kalmanFilterTracker kmt;
+    string file = "/Users/imac/Desktop/Computer Vision/videos/ball2.mp4";
+    VideoCapture capture(file);
+    Mat frame;
+    const string winName = "task3";
+    namedWindow( winName, WINDOW_AUTOSIZE );
+    kmt.setVideoAndWinName(capture, winName);
+    kmt.skipNFrames();
+    kmt.getReferenceImg();
+    
+    capture.release();
+    capture.open(file);
+    kmt.initKalmanFilter();
+    
+    capture.release();
+    return 1;
+}
+
+int main(int argc, char** argv)
+{
+//    segment(argc, argv);
+//    motion_tracking(argc, argv);
+    kalman_filter_tracking(argc, argv);
+}
+

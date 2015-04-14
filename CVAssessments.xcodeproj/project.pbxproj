@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		888D8FE11ADAE636005A74DD /* motionTrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 888D8FDF1ADAE636005A74DD /* motionTrack.cpp */; };
 		888D8FE31ADAEF51005A74DD /* libboost_serialization.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 888D8FE21ADAEF51005A74DD /* libboost_serialization.dylib */; };
+		888D8FE81ADBED3C005A74DD /* kalmanFilterTrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 888D8FE61ADBED3C005A74DD /* kalmanFilterTrack.cpp */; };
 		88F81D021AD33C3A00B7AA1A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F81D011AD33C3A00B7AA1A /* main.cpp */; };
 		88F81D041AD8124D00B7AA1A /* segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F81D031AD8124C00B7AA1A /* segment.cpp */; };
 /* End PBXBuildFile section */
@@ -29,6 +30,8 @@
 		888D8FDF1ADAE636005A74DD /* motionTrack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = motionTrack.cpp; sourceTree = "<group>"; };
 		888D8FE01ADAE636005A74DD /* motionTrack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = motionTrack.hpp; sourceTree = "<group>"; };
 		888D8FE21ADAEF51005A74DD /* libboost_serialization.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_serialization.dylib; path = ../../../../Downloads/boost_1_57_0/stage/lib/libboost_serialization.dylib; sourceTree = "<group>"; };
+		888D8FE61ADBED3C005A74DD /* kalmanFilterTrack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kalmanFilterTrack.cpp; sourceTree = "<group>"; };
+		888D8FE71ADBED3C005A74DD /* kalmanFilterTrack.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kalmanFilterTrack.hpp; sourceTree = "<group>"; };
 		8898E50F1AC9B1750055D755 /* CVAssessments */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CVAssessments; sourceTree = BUILT_PRODUCTS_DIR; };
 		88F81D011AD33C3A00B7AA1A /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		88F81D031AD8124C00B7AA1A /* segment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = segment.cpp; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				88F81D071AD883AE00B7AA1A /* segment.hpp */,
 				888D8FDF1ADAE636005A74DD /* motionTrack.cpp */,
 				888D8FE01ADAE636005A74DD /* motionTrack.hpp */,
+				888D8FE61ADBED3C005A74DD /* kalmanFilterTrack.cpp */,
+				888D8FE71ADBED3C005A74DD /* kalmanFilterTrack.hpp */,
 			);
 			path = CVAssessments;
 			sourceTree = "<group>";
@@ -135,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88F81D021AD33C3A00B7AA1A /* main.cpp in Sources */,
+				888D8FE81ADBED3C005A74DD /* kalmanFilterTrack.cpp in Sources */,
 				88F81D041AD8124D00B7AA1A /* segment.cpp in Sources */,
 				888D8FE11ADAE636005A74DD /* motionTrack.cpp in Sources */,
 			);

@@ -12,12 +12,6 @@
 #include "motionTrack.hpp"
 
 
-const static int SENSITIVITY_VALUE = 12;
-const static int SEC_SENSITIVITY_VALUE = 38;
-const static int UNREALITIVE_THRESHOLD = 20;
-const static int BLUR_SIZE = 10;
-
-
 //int to string helper function
 string intToString(int number){
     
@@ -34,6 +28,7 @@ void motionTracker::setVideoAndWinName(VideoCapture& _video, const string& _winN
     
     video = &_video;
     winName = &_winName;
+//    video->set(CAP_PROP_POS_FRAMES, 5);
 }
 
 
@@ -54,8 +49,7 @@ void motionTracker::getReferenceImg(void)
     video->read(frame);
     cvtColor(frame, gray_frame, COLOR_BGR2GRAY);
     getDifference(head_adi, gray_head, gray_frame, SENSITIVITY_VALUE);
-    threshold(head_adi, head_adi, 0, 1, THRESH_BINARY);
-
+    
     
     Mat pre_frame(gray_frame.size(), gray_frame.type());
     do{
@@ -64,7 +58,7 @@ void motionTracker::getReferenceImg(void)
         if(frame.empty())
         {
             cout << "didn't found" <<endl;
-            break;
+            return;
             
         }
         cvtColor(frame, gray_frame, COLOR_BGR2GRAY);
@@ -83,9 +77,12 @@ void motionTracker::getDifference(Mat& adi, const Mat& frame1, const Mat& frame2
     
     //filter the pixels which has small change
     threshold(diff_image, thres_image, T, 255, THRESH_BINARY);
+//    imshow("diff adi", thres_image);    //TO DELETE
     //filter the pixels which is noise
     blur(thres_image, thres_image, Size(BLUR_SIZE, BLUR_SIZE));
-    threshold(thres_image, thres_image, T, 1, THRESH_BINARY);
+    threshold(thres_image, thres_image, T, 255, THRESH_BINARY);
+//    imshow("head adi", thres_image);    //TO DELETE
+//    waitKey();
     thres_image.copyTo(adi);
 }
 
@@ -106,7 +103,6 @@ void motionTracker::getBackground(const Mat& ball_mask, const Mat& frame1, const
     frame2.copyTo(reference, ball_mask);
     imshow("background", reference);
     waitKey();
-    
     cvtColor(reference, reference, COLOR_BGR2GRAY);
 }
 
@@ -115,14 +111,15 @@ void motionTracker::getTarget(const Mat& frame)
     Mat target_mask, gray_frame;
     cvtColor(frame, gray_frame, COLOR_BGR2GRAY);
     getDifference(target_mask, reference, gray_frame, SEC_SENSITIVITY_VALUE);
-//    threshold(target, target, 0, 255, THRESH_BINARY);
-//    imshow("difference", target);
-//    waitKey(10);
+    getContours(target_mask);
+}
+
+void motionTracker::getContours(const Mat& mask)
+{
     //these two vectors needed for output of findContours
     vector< vector<Point> > contours;
     vector<Vec4i> hierarchy;
-    findContours(target_mask, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-    
+    findContours(mask, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
     Rect objectBoundingRectangle;
     int target[2];
     if(contours.size()>0)
@@ -134,25 +131,17 @@ void motionTracker::getTarget(const Mat& frame)
         //make a bounding rectangle around the largest contour then find its centroid
         //this will be the object's final estimated position.
         objectBoundingRectangle = boundingRect(largestContourVec.at(0));
-        int xpos = objectBoundingRectangle.x+objectBoundingRectangle.width/2;
-        int ypos = objectBoundingRectangle.y+objectBoundingRectangle.height/2;
+        x = objectBoundingRectangle.x+objectBoundingRectangle.width/2;
+        y = objectBoundingRectangle.y+objectBoundingRectangle.height/2;
         
         //update the objects positions by changing the 'theObject' array values
-        target[0] = xpos , target[1] = ypos;
+        target[0] = x , target[1] = y;
     }
     
     //make some temp x and y variables so we dont have to type out so much
-    int x = target[0];
-    int y = target[1];
     targets.push_back(intToString(x));
     targets.push_back(intToString(y));
     
-    //draw some crosshairs on the object
-    circle(frame,Point(x,y),20,Scalar(0,255,0),2);
-    line(frame,Point(x,y),Point(x,y-15),Scalar(0,255,0),2);
-    line(frame,Point(x,y),Point(x,y+15),Scalar(0,255,0),2);
-    line(frame,Point(x,y),Point(x-15,y),Scalar(0,255,0),2);
-    line(frame,Point(x,y),Point(x+15,y),Scalar(0,255,0),2);
 }
 
 void motionTracker::outputPosition() const
@@ -171,3 +160,12 @@ void motionTracker::outputPosition() const
 
 }
 
+void motionTracker::drawCross(const Mat& frame, int x, int y)
+{
+    //draw some crosshairs on the object
+    circle(frame,Point(x,y),20,Scalar(0,255,0),2);
+    line(frame,Point(x,y),Point(x,y-15),Scalar(0,255,0),2);
+    line(frame,Point(x,y),Point(x,y+15),Scalar(0,255,0),2);
+    line(frame,Point(x,y),Point(x-15,y),Scalar(0,255,0),2);
+    line(frame,Point(x,y),Point(x+15,y),Scalar(0,255,0),2);
+}

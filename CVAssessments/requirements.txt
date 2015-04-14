@@ -21,3 +21,18 @@ task 2)
     - replace the pixels by the sequence images
 
 2. Subtract every frame from the refrence image.
+    - get the contour of the object
+    - calculate the center
+
+
+tast 3)
+1. Motion model
+    - try constant velocity model
+
+2. Observation model
+    - cartesion representation
+
+3. Gating
+
+4. Overview
+    

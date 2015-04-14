@@ -9,11 +9,13 @@
 #ifndef CVAssessments_segment_hpp
 #define CVAssessments_segment_hpp
 
+#ifndef iostream
+#define iostream
 #include <iostream>
-
-
 using namespace cv;
 using namespace std;
+
+#endif
 
 
 class GCApplication
