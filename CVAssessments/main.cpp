@@ -134,8 +134,7 @@ int motion_tracking(int argc, char** argv)
     mt.setVideoAndWinName(capture, winName);
     mt.getReferenceImg();
 
-    capture.release();
-    capture.open(file);
+    mt.resetVideo();
     while (capture.get(CAP_PROP_POS_FRAMES)<capture.get(CAP_PROP_FRAME_COUNT)-1) {
         capture.read(frame);
         mt.getTarget(frame);
@@ -152,7 +151,7 @@ int motion_tracking(int argc, char** argv)
 int kalman_filter_tracking(int argc, char** argv)
 {
     kalmanFilterTracker kmt;
-    string file = "/Users/imac/Desktop/Computer Vision/videos/ball2.mp4";
+    string file = "/Users/imac/Desktop/Computer Vision/videos/ball2-quicktime.mov";
     VideoCapture capture(file);
     Mat frame;
     const string winName = "task3";
@@ -160,11 +159,10 @@ int kalman_filter_tracking(int argc, char** argv)
     kmt.setVideoAndWinName(capture, winName);
     kmt.skipNFrames();
     kmt.getReferenceImg();
-    
-    capture.release();
-    capture.open(file);
+
+    kmt.resetVideo();
     kmt.initKalmanFilter();
-    
+    kmt.outputPosition();
     capture.release();
     return 1;
 }

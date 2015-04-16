@@ -21,6 +21,12 @@ string intToString(int number){
     return ss.str();
 }
 
+void motionTracker::resetVideo()
+{
+    video->set(CAP_PROP_POS_FRAMES, 0);
+
+}
+
 void motionTracker::setVideoAndWinName(VideoCapture& _video, const string& _winName)
 {
     if( !_video.isOpened() || _winName.empty())
@@ -50,7 +56,6 @@ void motionTracker::getReferenceImg(void)
     cvtColor(frame, gray_frame, COLOR_BGR2GRAY);
     getDifference(head_adi, gray_head, gray_frame, SENSITIVITY_VALUE);
     
-    
     Mat pre_frame(gray_frame.size(), gray_frame.type());
     do{
         gray_frame.copyTo(pre_frame);
@@ -61,6 +66,7 @@ void motionTracker::getReferenceImg(void)
             return;
             
         }
+
         cvtColor(frame, gray_frame, COLOR_BGR2GRAY);
         getDifference(adi, gray_frame, pre_frame, SENSITIVITY_VALUE);
         
@@ -68,6 +74,7 @@ void motionTracker::getReferenceImg(void)
     
     getBackground(head_adi, head_frame, frame);
 }
+
 
 void motionTracker::getDifference(Mat& adi, const Mat& frame1, const Mat& frame2, const int T)
 {
@@ -90,7 +97,7 @@ bool motionTracker::isOverlap(const Mat& adi1, const Mat& adi2)
 {
     Mat bitand_result;
     bitwise_and(adi1, adi2, bitand_result);
-    cout << countNonZero(bitand_result) << endl;
+//    cout << countNonZero(bitand_result) << endl;
     if(countNonZero(bitand_result) > UNREALITIVE_THRESHOLD)
         return false;
     else
@@ -101,8 +108,8 @@ void motionTracker::getBackground(const Mat& ball_mask, const Mat& frame1, const
 {
     frame1.copyTo(reference);
     frame2.copyTo(reference, ball_mask);
-    imshow("background", reference);
-    waitKey();
+//    imshow("background", reference);
+//    waitKey();
     cvtColor(reference, reference, COLOR_BGR2GRAY);
 }
 
@@ -168,4 +175,15 @@ void motionTracker::drawCross(const Mat& frame, int x, int y)
     line(frame,Point(x,y),Point(x,y+15),Scalar(0,255,0),2);
     line(frame,Point(x,y),Point(x-15,y),Scalar(0,255,0),2);
     line(frame,Point(x,y),Point(x+15,y),Scalar(0,255,0),2);
+}
+
+Mat motionTracker::binary2mask(const Mat& frame, const int type)
+{
+    Mat dst;
+    if (type == BINARY)
+        threshold(frame, dst, 0, 1, THRESH_BINARY);
+    else if (type == BINARY_INV)
+        threshold(frame, dst, 0, 255, THRESH_BINARY);
+    
+    return dst;
 }

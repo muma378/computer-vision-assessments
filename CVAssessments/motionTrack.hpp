@@ -28,7 +28,8 @@ using namespace std;
 
 #endif
 
-
+// the variable with prefix binary_ is the image consist of 0 and 255
+// meanwhile prefix mask_ is the image consist of 0 and 1
 class motionTracker
 {
 private:
@@ -47,17 +48,20 @@ protected:
     
     
 public:
+    enum{ BINARY = 0, BINARY_INV = 1 };
     int x;
     int y;
+    void resetVideo();
     void setVideoAndWinName(VideoCapture& _video, const string& win_name);
     void getReferenceImg(void);
-    void getDifference(Mat& thres_image, const Mat& frame1, const Mat& frame2, const int T);
-    bool isOverlap(const Mat& adi1, const Mat& adi2);
-    void getBackground(const Mat& mask, const Mat& frame1, const Mat& frame2);
+    void getDifference(Mat& binary_dst, const Mat& gray_frame1, const Mat& gray_frame2, const int thresholding);
+    bool isOverlap(const Mat& mask_frame1, const Mat& mask_frame2);
+    void getBackground(const Mat& mask, const Mat& head_frame, const Mat& unoverlapped_frame);
     void getTarget(const Mat& frame);
     void getContours(const Mat& mask);
     void drawCross(const Mat& frame, int x, int y);
     void outputPosition() const;
+    Mat binary2mask(const Mat& binary_frame, const int type=BINARY);
 };
 string intToString(int number);
 

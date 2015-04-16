@@ -34,5 +34,9 @@ tast 3)
 
 3. Gating
 
-4. Overview
-    
+4. Adaptive Kalman Filter. Based on the system we used, the following steps need to be done to develop an adaptive kalman filter:
+    + K-means to extract the dominant color feature
+    - rebuild the motion model with the concept d(t) = d(t-1) + (d(t-1) - d(t-2))
+    - (option) convert the color space to HSI
+    - find the matching object with the DomC in the search range
+    - adjust the noise according to the occlusion rate

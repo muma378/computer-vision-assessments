@@ -34,6 +34,9 @@ using namespace std;
 //Kalman Filter with valitation gating
 class extendedKalmanFilter:public KalmanFilter
 {
+private:
+    int gating_counter = 0;
+    
 public:
     Mat predictObservation;
     Mat innovationCov;
@@ -47,9 +50,14 @@ class kalmanFilterTracker:public motionTracker
 {
 private:
     extendedKalmanFilter KF;
+    const int CLUSTER_NUM = 5 ;
     
 protected:
     int SKIPPED_FRAMES = 5;
+    Scalar dominantColor;
+    float THRESH_B = 22;
+    float THRESH_G = 22;
+    float THRESH_R = 22;
     
 public:
     kalmanFilterTracker(){
@@ -60,6 +68,10 @@ public:
     void initKalmanFilter();
     Mat getMeasurement(const Mat& frame);
     void getTarget(const Mat& frame);
+    void getDominantColor(const Mat& frame);
+    void getNonzeroFeatures(const Mat& frame, Mat& features);
+    int getMostOftenLabel(Mat& labels);
+    void thresholdWithDomC(const Mat& filtered_frame, Mat& mask);
     
 };
 
